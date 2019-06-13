@@ -1,6 +1,6 @@
 class MicropostsController < ApplicationController
   before_action :require_user_logged_in
-  
+
   def create
     @micropost = current_user.microposts.build(micropost_params)
     if @micropost.save
@@ -12,7 +12,7 @@ class MicropostsController < ApplicationController
       render 'toppages/index'
     end
   end
-
+  
   def destroy
     @micropost.destroy
     flash[:success] = 'メッセージを削除しました。'
@@ -21,6 +21,10 @@ class MicropostsController < ApplicationController
 
   private
 
+  def micropost_params
+    params.require(:micropost).permit(:content)
+  end
+  
   def correct_user
     @micropost = current_user.microposts.find_by(id: params[:id])
     unless @micropost
